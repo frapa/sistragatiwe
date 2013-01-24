@@ -13,6 +13,32 @@ void Geometry::addFace(sf::Vector2f a, sf::Vector2f b, sf::Vector2f c) {
     faces.push_back(face);
 }
 
+void Geometry::clear() {
+    vertices.clear();
+    faces.clear();
+}
+
+Geometry Geometry::operator+ (const Geometry& geom) {
+    // create a copy of itself
+    Geometry new_geom(*this);
+
+    new_geom += geom;
+
+    return new_geom;
+}
+
+Geometry& Geometry::operator+= (const Geometry& geom) {
+    for (const sf::Vector2f& vertex: geom.vertices) {
+        addVertex(vertex);
+    }
+
+    for (const Face& face: geom.faces) {
+        addFace(face[0], face[1], face[2]);
+    }
+
+    return *this;
+}
+
 bool Geometry::contains(sf::Vector2f point) {
     for (Face& face: faces) {
         if (Triangulate::InsideTriangle(
@@ -27,4 +53,8 @@ bool Geometry::contains(sf::Vector2f point) {
     }
 
     return false;
+}
+
+float Geometry::getArea() {
+    Triangulate::Area(vertices);
 }

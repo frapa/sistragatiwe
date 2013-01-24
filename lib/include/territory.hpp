@@ -4,26 +4,31 @@
 #include <array>
 #include <string>
 #include <SFML/Graphics.hpp>
-#include "svg.hpp"
-#include "shape.hpp"
+#include "../../svgpathlib/include/svg.hpp"
+#include "../../svgpathlib/include/shape.hpp"
 
 class Territory: public sf::Drawable {
 private:
-    SVGPath path;
+    Geometry geom;
     Shape shape;
 
-    bool checkCollision(sf::Vector2f);
-
 public:
-    Territory(std::string _path):
-        path(_path),
-        shape(path.geom)
-    {}
+    Territory(std::string path)
+    {
+        // load path
+        svg::Path p(path);
+        // and create a geometry from it
+        p.createGeom(geom);
 
-    float getArea() { return path.getArea(); }
+        shape.createFromGeom(geom);
+    }
+
+    float getArea() { return geom.getArea(); }
     
-    inline bool contains(float x, float y) { return checkCollision(sf::Vector2f(x, y)); }
-    inline bool contains(sf::Vector2f pos) { return checkCollision(pos); }
+    inline bool contains(float x, float y)
+        { return geom.contains(sf::Vector2f(x, y)); }
+    inline bool contains(sf::Vector2f pos)
+        { return geom.contains(pos); }
     
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };

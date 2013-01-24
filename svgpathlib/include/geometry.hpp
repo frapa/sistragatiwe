@@ -23,9 +23,17 @@ public:
     void addVertex(sf::Vector2f vertex);
     // add a face
     void addFace(sf::Vector2f a, sf::Vector2f b, sf::Vector2f c);
+    // clear content
+    void clear();
+
+    // geometries can be added up by summing the triangles and vertices
+    Geometry operator+ (const Geometry& geom);
+    Geometry& operator+= (const Geometry& geom);
 
     // check if the geometry contains a point
     bool contains(sf::Vector2f point);
+    // returns the area of the geometry
+    float getArea();
 };
 
 #endif

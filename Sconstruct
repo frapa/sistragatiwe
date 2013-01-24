@@ -1,9 +1,10 @@
 env = Environment(CCFLAGS="-std=c++11 -g")
 
+env.Library("svgpath", Glob("svgpathlib/src/*.cpp"))
 env.Library("ssgtw", Glob("lib/src/*.cpp"))
 
 env.Program("sistragatiwe.cpp",
     LIBS=("sfml-graphics", "sfml-window", "sfml-system",
-		"PocoFoundation", "ssgtw", "emon"),
+		"PocoFoundation", "ssgtw", "svgpath", "emon"),
     LIBPATH="."
 )
