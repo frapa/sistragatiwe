@@ -6,7 +6,7 @@ void Shape::createFromGeom(Geometry& geom) {
     }
 
     if (outline.getVertexCount() != geom.vertices.size()) {
-        outline.resize(geom.vertices.size());
+        outline.resize(geom.vertices.size() + 1);
     }
 
     int i = 0;
@@ -30,12 +30,15 @@ void Shape::createFromGeom(Geometry& geom) {
 
             ++j;
         }
+
+        outline[j].position = geom.vertices[0];
+        outline[j].color = outline_color;
 }
 
 void Shape::setFillColor(sf::Color& color) {
     fill_color = color;
     
-    for (int i = 0; i != vertices.getVertexCount(); ++i) {
+    for (int i = 0; i != vertices.getVertexCount() + 1; ++i) {
         vertices[i].color = fill_color;
     }
 }
@@ -43,7 +46,7 @@ void Shape::setFillColor(sf::Color& color) {
 void Shape::setOutlineColor(sf::Color& color) {
     outline_color = color;
 
-    for (int i = 0; i != outline.getVertexCount(); ++i) {
+    for (int i = 0; i != outline.getVertexCount() + 1; ++i) {
         outline[i].color = outline_color;
     }
 }

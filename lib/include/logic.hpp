@@ -17,8 +17,7 @@ void logic(World* w) {
         // update resources 
         for (Player& player: world.players) {
             for (Node t: player.territories) {
-                //player.food += world.area[t];
-                //std::cout << player.food << std::endl;
+                player.food += world.map.area[t];
             }
         }
         

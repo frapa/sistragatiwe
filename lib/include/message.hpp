@@ -5,7 +5,9 @@
 #include <list>
 #include <queue>
 
-enum message_type {};
+enum message_type {
+    
+};
 
 // forward declaration
 struct Message;
@@ -13,8 +15,12 @@ struct Message;
 // this is meant to be subclassed...
 class Receiver {
 public:
+    Receiver() {
+        
+    }
+
     // must be redefinded to receive messages
-    virtual void onMessage(Message& message);
+    virtual void onMessage(Message& message) {}
 };
 
 class MessageHandler {
@@ -22,7 +28,17 @@ private:
     std::queue<Message*, std::list<Message*>> messages;
     std::vector<Receiver*> receivers;
 
+    // singleton design
+    MessageHandler() {}
+    MessageHandler(MessageHandler const&);
+    void operator=(MessageHandler const&);
+
 public:
+    static MessageHandler& getInstance() {
+        static MessageHandler instance;
+
+        return instance;
+    }
 
     // dispatches events
     void dispatch();
@@ -31,9 +47,6 @@ public:
     // copies messages to the queue
     void receive(Message& message);
 };
-
-// this should be the unique (a singleton)
-MessageHandler hub;
 
 // also meant to be subclassed
 struct Message {

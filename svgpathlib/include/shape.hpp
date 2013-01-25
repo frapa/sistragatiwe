@@ -29,7 +29,7 @@ public:
 
     Shape(Geometry& geom):
         vertices(sf::Triangles, geom.faces.size() * 3),
-        outline(sf::LinesStrip, geom.vertices.size()),
+        outline(sf::LinesStrip, geom.vertices.size() + 1),
         draw_fill(true), draw_outline(true),
         outline_thickness(1.f),
         outline_color(255, 255, 255, 255),

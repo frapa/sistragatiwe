@@ -22,5 +22,5 @@ void MessageHandler::receive (Message& message) {
 }
 
 void Message::send() {
-    hub.receive(*this);
+    MessageHandler::getInstance().receive(*this);
 }

@@ -19,7 +19,12 @@ int main() {
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				window.close();
-			} else if (event.type == sf::Event::MouseButtonReleased) {
+			} else if (event.type == sf::Event::Resized) {
+                sf::View view(window.getView());
+                view.setSize(event.size.width, event.size.height);
+
+                window.setView(view);
+            } else if (event.type == sf::Event::MouseButtonReleased) {
                 sf::Vector2i pos = sf::Mouse::getPosition(window);
 
                 sf::Vector2f v = window.mapPixelToCoords(pos);

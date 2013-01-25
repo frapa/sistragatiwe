@@ -8,14 +8,15 @@
 #include <SFML/Graphics.hpp>
 #include "territory.hpp"
 #include "pugixml.hpp"
+#include "message.hpp"
 #include <lemon/smart_graph.h>
 #include <lemon/maps.h>
 
 typedef lemon::SmartDigraph::Node Node;
 typedef lemon::SmartDigraph::Arc Arc;
 
-class Map: public sf::Drawable {
-private:
+class Map: public sf::Drawable, public Receiver {
+public:
     // graph which stores all data about the map and links between territories
     lemon::SmartDigraph graph;
     // add an attribute name to every node in the graph
@@ -29,7 +30,6 @@ private:
     // used to find a node from the name
     std::map<std::string, Node> nodes;
 
-public:
     Map():
         // node maps
         name(graph), area(graph),
@@ -46,6 +46,7 @@ public:
     unsigned getTerritoryCount();
     
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    virtual void onMessage(Message& message);
 };
 
 #endif

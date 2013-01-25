@@ -4,6 +4,7 @@
 #include <vector>
 #include <array>
 #include <algorithm>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 #include "triangulate.hpp"
 

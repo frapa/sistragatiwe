@@ -16,10 +16,13 @@ void Map::addTerritory(std::string path, std::string _name) {
         name[t] = _name;
         nodes[_name] = t;
         // other attributes
-        territories[t] = new Territory(path); // territory which olds the geometry
-        area[t] = territories[t]->getArea(); // are of the territory
+        // territory which olds the geometry
+        territories[t] = new Territory(path);
+        // area of the territory
+        area[t] = territories[t]->getArea() / 256.f;
     } else {
-        std::cout << "Error while creating territory: name is not unique." << std::endl;
+        std::cout << "Error while creating territory: "
+            "name is not unique." << std::endl;
     }
 }
 
@@ -40,7 +43,8 @@ Node Map::getTerritoryByName(std::string _name) {
     /*if (nodes.find(_name) == nodes.end()) {
         return nodes[_name];
     } else {
-        // if a territory with that name does not exists return invalid iterator
+        // if a territory with that name does not exists
+        // return invalid iterator
         return lemon::INVALID;
     }*/
 }
@@ -67,4 +71,8 @@ void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     for (lemon::SmartDigraph::NodeIt t(graph); t != lemon::INVALID; ++t) {
         target.draw(*territories[t], states);
     }
+}
+
+void Map::onMessage(Message& message) {
+
 }

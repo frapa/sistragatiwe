@@ -56,5 +56,5 @@ bool Geometry::contains(sf::Vector2f point) {
 }
 
 float Geometry::getArea() {
-    Triangulate::Area(vertices);
+    return abs(Triangulate::Area(vertices));
 }

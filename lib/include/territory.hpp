@@ -8,11 +8,10 @@
 #include "../../svgpathlib/include/shape.hpp"
 
 class Territory: public sf::Drawable {
-private:
+public:
     Geometry geom;
     Shape shape;
 
-public:
     Territory(std::string path)
     {
         // load path
