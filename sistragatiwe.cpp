@@ -1,17 +1,20 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "lib/include/world.hpp"
-#include "lib/include/logic.hpp"
+#include "lib/include/message.hpp"
+#include "lib/include/message_spec.hpp"
+
+sf::Mutex mutex;
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Sistragatiwe");
 	window.setFramerateLimit(30);
 
-    World world("resources/maps/test/test.xml");
+    World world(window, "resources/maps/test/test.xml");
     
     // not that eveything is initialized start the
     // game logic loop
-    sf::Thread logic_thread(&logic, &world);
+    sf::Thread logic_thread(&World::gameLogic, &world);
     logic_thread.launch();
 
 	while (window.isOpen()) {
@@ -28,15 +31,23 @@ int main() {
                 sf::Vector2i pos = sf::Mouse::getPosition(window);
 
                 sf::Vector2f v = window.mapPixelToCoords(pos);
-                std::cout << v.x << " " << v.y << std::endl;
             }
+            
+            mutex.lock();
+            world.events.push(event);
+            mutex.unlock();
 		}
+
+        mutex.lock();
 
 		window.clear(sf::Color(25, 130, 225));
 
         window.draw(world.map);
+        window.draw(world.gui);
 
 		window.display();
+
+        mutex.unlock();
 	}
 
     logic_thread.terminate();

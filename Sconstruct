@@ -5,6 +5,6 @@ env.Library("ssgtw", Glob("lib/src/*.cpp"))
 
 env.Program("sistragatiwe.cpp",
     LIBS=("sfml-graphics", "sfml-window", "sfml-system",
-		"PocoFoundation", "ssgtw", "svgpath", "emon"),
+	"ssgtw", "svgpath", "emon", "PocoFoundation"),
     LIBPATH="."
 )

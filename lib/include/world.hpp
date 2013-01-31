@@ -4,6 +4,8 @@
 #include <iostream>
 #include <algorithm>
 #include <random>
+#include <queue>
+#include <list>
 #include <ctime>
 #include <lemon/smart_graph.h>
 #include <SFML/Graphics.hpp>
@@ -12,81 +14,46 @@
 #include "map.hpp"
 #include "player.hpp"
 #include "message.hpp"
+#include "message_spec.hpp"
 #include "gui.hpp"
 
 typedef lemon::SmartDigraph::Node Node;
 typedef lemon::SmartDigraph::Arc Arc;
 
+extern sf::Mutex mutex;
+
 class World {
+private:
+    void loadFonts();
+
+    void loadMap(std::string filename);
+    void createPlayers(int humans, int bots);
+    void createGui();
+
 public:
-    MessageHandler& hub;
-
+    sf::RenderWindow& window;
+    // manages gui objects and drawing
     Gui gui;
-
     // map stores informations about the world
     Map map;
-    
+    // list with all players
     std::vector<Player> players;
+    // events from the user
+    std::queue<sf::Event, std::list<sf::Event>> events;
 
     // initialize game
-    World(std::string map_file):
-        hub(MessageHandler::getInstance())
+    World(sf::RenderWindow& _window, std::string map_file):
+        window(_window)
     {
-        // add message receivers
-        hub.registerReceiver(map);
-
-        // create a new xml document
-        pugi::xml_document world;
-        // construct it from a file
-        world.load_file(map_file.c_str());
+        loadMap(map_file);
         
-        // load all territories from the file
-        for (pugi::xml_node territory: world.child("map").children("territory")) {
-            // add territory to map, using document data
-            map.addTerritory(territory.attribute("path").value(),
-                territory.attribute("name").value());
-        }
-        
-        // create roads between territories
-        for (pugi::xml_node territory: world.child("map").children("territory")) {
-            for (pugi::xml_node link: territory.children("link")) {
-                Node from = map.getTerritoryByName(territory.attribute("name").value());
-                Node to = map.getTerritoryByName(link.attribute("to").value());
+        createPlayers(1, 0);
 
-                map.addRoad(from, to, link.attribute("length").as_float());
-            }
-        }
-        
-        // create players
-        players.emplace(players.end(), "Human", sf::Color::Red);
-
-        // create a random number generator
-        std::mt19937 gen(time(NULL));
-        std::uniform_int_distribution<int> dist(0, map.getTerritoryCount() - 1);
-
-        // randomly assign a territory to start with to each player
-        std::vector<int> numbers;
-        for (Player& player: players) {
-            int number;
-
-            // get a number (and check the corresponding territory has not already
-            // been assigned to another player)
-            do {
-                number = dist(gen);
-            } while (std::find(numbers.begin(), numbers.end(), number) != numbers.end());
-
-            Node terr = map.getTerritoryByNumber(number);
-
-            // assign territory to player
-            player.addTerritory(terr);
-            // set the color of the territory
-            map.territories[terr]->shape.setFillColor(player.color);
-
-            numbers.push_back(number);
-        }
-
-        gui.addWidget
+        createGui();
     }
+
+    // starts the game logic
+    void gameLogic();
 };
 
 #endif

@@ -15,7 +15,7 @@
 typedef lemon::SmartDigraph::Node Node;
 typedef lemon::SmartDigraph::Arc Arc;
 
-class Map: public sf::Drawable, public Receiver {
+class Map: public sf::Drawable {
 public:
     // graph which stores all data about the map and links between territories
     lemon::SmartDigraph graph;
@@ -46,7 +46,6 @@ public:
     unsigned getTerritoryCount();
     
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-    virtual void onMessage(Message& message);
 };
 
 #endif

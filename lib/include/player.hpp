@@ -13,12 +13,14 @@ class Player {
 public:
     std::vector<Node> territories;
 
+    bool is_human;
     int food;
 
     std::string name;
     sf::Color color;
 
-    Player(std::string _name, sf::Color _color):
+    Player(bool human, std::string _name, sf::Color _color):
+        is_human(human),
         name(_name), color(_color), food(0)
     {}
 

@@ -72,7 +72,3 @@ void Map::draw(sf::RenderTarget& target, sf::RenderStates states) const {
         target.draw(*territories[t], states);
     }
 }
-
-void Map::onMessage(Message& message) {
-
-}
